@@ -1,8 +1,8 @@
 
-from flask import Flask, render_template
+from flask import Flask, render_template, send_from_directory
 from datetime import datetime
 
-server = Flask(__name__, template_folder='.', static_folder='static')
+app = Flask(__name__, template_folder='.', static_folder='.')
 
 DATABASE = {
     "44644168": {"name": "Priya Nair", "role": "Seniors"},
@@ -52,10 +52,20 @@ def to_display_time(time_str):
     return datetime.strptime(time_str, "%H:%M").strftime("%I:%M%p").lstrip("0")
 
 
-@server.route('/')
+@app.route('/')
 def simulation():
     return render_template('GateSimulation.html')
 
 
+@app.route('/GateSystemInterface.css')
+def gate_css():
+    return send_from_directory(app.root_path, 'GateSystemInterface.css', mimetype='text/css')
+
+
+@app.route('/GateSystem.js')
+def gate_js():
+    return send_from_directory(app.root_path, 'GateSystem.js', mimetype='application/javascript')
+
+
 if __name__ == "__main__":
-    server.run(debug=True)
+    app.run(debug=True)
